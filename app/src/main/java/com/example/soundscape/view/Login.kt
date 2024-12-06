@@ -6,19 +6,26 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,11 +35,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.soundscape.R
 import com.example.soundscape.ui.theme.SoundScapeTheme
 
 class Login : ComponentActivity() {
@@ -44,16 +58,34 @@ class Login : ComponentActivity() {
                 //True = Login ; False = Register
                 val showLoginForm = rememberSaveable { mutableStateOf(true) }
 
-                Surface(modifier = Modifier
-                    .fillMaxSize())
-                {
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .background(Brush
+                        .verticalGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.primary,
+                                MaterialTheme.colorScheme.secondary
+                            )
+                        )
+                    )
+                ){
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.fillMaxSize()
                     ) {
                         if(showLoginForm.value)
                         {
-                            Text(text = "Inicie sesion")
+                            Image(
+                                painter = painterResource(id = R.drawable.applogo),
+                                contentDescription = "Logo",
+                                modifier = Modifier
+                                    .size(300.dp)
+                                    .clip(CircleShape)
+                            )
+
+                            Spacer(modifier = Modifier.height(50.dp))
+
                             UserForm(isCreateAccount = false)
                             {
                                 email, password ->
@@ -97,7 +129,6 @@ class Login : ComponentActivity() {
             }
         }
     }
-
 
     @Composable
     private fun UserForm(
@@ -174,6 +205,13 @@ class Login : ComponentActivity() {
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
                 .fillMaxWidth(),
             visualTransformation = PasswordVisualTransformation(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.secondary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                focusedLabelColor = Color.White,
+                unfocusedLabelColor = Color.White
+            )
+
         )
     }
 
@@ -203,11 +241,18 @@ class Login : ComponentActivity() {
             value = valueState.value,
             onValueChange = {valueState.value = it},
             label = {Text(text = labelId)},
+            textStyle = TextStyle(color = Color.White, fontWeight = FontWeight.Normal),
             singleLine = isSingleLine,
             modifier = Modifier
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
                 .fillMaxWidth(),
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = MaterialTheme.colorScheme.secondary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.tertiary,
+                focusedLabelColor = Color.White,
+                unfocusedLabelColor = Color.White
+            )
         )
     }
 
@@ -222,16 +267,34 @@ class Login : ComponentActivity() {
             //True = Login ; False = Register
             val showLoginForm = rememberSaveable { mutableStateOf(true) }
 
-            Surface(modifier = Modifier
-                .fillMaxSize())
-            {
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .background(Brush
+                    .verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.secondary
+                        )
+                    )
+                )
+            ){
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     if(showLoginForm.value)
                     {
-                        Text(text = "Inicie sesion")
+                        Image(
+                            painter = painterResource(id = R.drawable.applogo),
+                            contentDescription = "Logo",
+                            modifier = Modifier
+                                .size(300.dp)
+                                .clip(CircleShape)
+                        )
+
+                        Spacer(modifier = Modifier.height(50.dp))
+
                         UserForm(isCreateAccount = false)
                         {
                                 email, password ->
