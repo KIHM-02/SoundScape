@@ -1,4 +1,9 @@
 package com.example.soundscape.model
 
-class Usuario() {
-}
+open class Usuario(
+    var rol: String,
+    var nombre: String,
+    var edad: Int,
+    var email: String,
+    var password: String
+)
