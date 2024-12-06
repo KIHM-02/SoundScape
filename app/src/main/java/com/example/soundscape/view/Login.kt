@@ -88,17 +88,22 @@ class Login : ComponentActivity() {
 
                             UserForm(isCreateAccount = false)
                             {
-                                email, password ->
-                                Log.d("Login", "Login: $email, $password")
+                                email, password, name, age ->
+                                Log.d("Login", "Login: $email, $password, $name, $age")
                             }
                         }
                         else
                         {
-                            Text(text = "Cree una cuenta")
+                            Text(
+                                text  = "Cree una cuenta",
+                                color = MaterialTheme.colorScheme.tertiary,
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Bold
+                            )
                             UserForm(isCreateAccount = true)
                             {
-                                email, password ->
-                                Log.d("Registro", "Registro: $email, $password")
+                                email, password, name, age ->
+                                Log.d("Registro", "Registro: $email, $password, $name, $age")
                             }
                         }
 
@@ -133,9 +138,11 @@ class Login : ComponentActivity() {
     @Composable
     private fun UserForm(
         isCreateAccount: Boolean = false,
-        onDone: (String, String) -> Unit = {email, password ->})
+        onDone: (String, String, String, Int) -> Unit = {email, password, name, age ->})
     {
         val email = rememberSaveable { mutableStateOf("") }
+        val name = rememberSaveable { mutableStateOf("") }
+        val age = rememberSaveable { mutableStateOf("") }
         val password = rememberSaveable { mutableStateOf("") }
         val passwordVisibility = rememberSaveable { mutableStateOf(false) }
 
@@ -156,16 +163,64 @@ class Login : ComponentActivity() {
                 passwordVisibility = passwordVisibility,
                 labelId = "Password")
 
+            if(isCreateAccount)
+            {
+                NameInput(nameState = name)
+                
+                AgeInput(ageState = age)
+            }
+
             SubmitButton(
                 textId = if(isCreateAccount) "Crear Cuenta" else "Iniciar Sesion",
                 inputValid = allDataIsCaptured
             )
             {
                 //aqui mandamos la funcion del UserForm
-                onDone(email.value.trim(), password.value.trim())
+
+                if(isCreateAccount)
+                {
+                    onDone(
+                        email.value.trim(),
+                        password.value.trim(),
+                        name.value.trim(),
+                        age.value.toInt())
+                }
+                else
+                {
+                    onDone(
+                        email.value.trim(),
+                        password.value.trim(),
+                        "none",
+                        0)
+                }
+
                 keyboardController?.hide()
             }
         }
+    }
+
+    private @Composable
+    fun AgeInput(
+        ageState: MutableState<String>,
+        labelId: String = "Edad")
+    {
+        InputField(
+            valueState = ageState,
+            labelId = labelId,
+            keyboardType = KeyboardType.Number
+        )
+    }
+
+    private @Composable
+    fun NameInput(
+        nameState: MutableState<String>,
+        labelId: String = "Nombre") 
+    {
+        InputField(
+            valueState = nameState,
+            labelId = labelId,
+            keyboardType = KeyboardType.Text
+        )
     }
 
     private @Composable
@@ -297,16 +352,44 @@ class Login : ComponentActivity() {
 
                         UserForm(isCreateAccount = false)
                         {
-                                email, password ->
+                                email, password, name, age ->
+                            Log.d("Login", "Login: $email, $password, $name, $age")
                         }
                     }
                     else
                     {
-                        Text(text = "Cree una cuenta")
+                        Text(
+                            text  = "Cree una cuenta",
+                            color = MaterialTheme.colorScheme.tertiary,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
                         UserForm(isCreateAccount = true)
                         {
-                                email, password ->
+                                email, password, name, age ->
+                            Log.d("Registro", "Registro: $email, $password, $name, $age")
                         }
+                    }
+
+                    //Seccion de registro
+                    Spacer(modifier = Modifier.padding(15.dp))
+
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        val labelLogin = if(showLoginForm.value) "¿No tienes cuenta?"
+                        else "¿Ya tienes cuenta?"
+                        val labelRegister = if(showLoginForm.value) "Registrate"
+                        else "Inicia sesión"
+
+                        Text(text = labelLogin)
+                        Text(text = labelRegister,
+                            modifier = Modifier
+                                .clickable { showLoginForm.value = !showLoginForm.value }
+                                .padding(start = 5.dp),
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
                     }
                 }
 
