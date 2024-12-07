@@ -2,4 +2,6 @@
     <string name="app_name">SoundScape</string>
     <string name="title_activity_main2">MainActivity2</string>
     <string name="title_activity_register">Register</string>
+    <string name="title_activity_reproductor">Reproductor</string>
+    <string name="title_activity_perfil_usuario">PerfilUsuario</string>
 </resources>
