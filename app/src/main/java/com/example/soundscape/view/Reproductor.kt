@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,17 +39,13 @@ class Reproductor : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .background(Brush
-                    .verticalGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primary,
-                            MaterialTheme.colorScheme.secondary
-                        )
-                    )
-                )
-            )
+           SoundScapeTheme {
+               Surface(
+                   modifier = Modifier.fillMaxSize(),
+               ){
+                   Reproductor(name = "rels b", nameSong = "Sin mirar las señales")
+               }
+           }
         }
     }
 }
@@ -176,10 +173,5 @@ fun Reproductor(name: String, nameSong: String, modifier: Modifier = Modifier){
 
         }
 }
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SoundScapeTheme {
-        Reproductor(name = "rels b", nameSong = "Sin mirar las señales")
-    }
-}
+
+
