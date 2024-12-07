@@ -7,3 +7,6 @@ open class Usuario(
     var email: String,
     var password: String
 )
+{
+    //Esto es un ejemplo de una commit de claudio y mio
+}
