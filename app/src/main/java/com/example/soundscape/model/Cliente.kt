@@ -8,6 +8,5 @@ class Cliente(
     password: String,
     var day: String,
     var month: String,
-    var year: String,
-    var birth: String
+    var year: String
 ): Usuario("Cliente", nombre, edad, email, password)

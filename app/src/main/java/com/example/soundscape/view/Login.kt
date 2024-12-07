@@ -1,11 +1,13 @@
 package com.example.soundscape.view
 
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,9 +47,12 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.soundscape.R
+import com.example.soundscape.controller.DataUsers
+import com.example.soundscape.model.Cliente
 import com.example.soundscape.ui.theme.SoundScapeTheme
 
 class Login : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -101,7 +106,19 @@ class Login : ComponentActivity() {
                             UserForm(isCreateAccount = true)
                             {
                                 email, password, name, age ->
-                                Log.d("Registro", "Registro: $email, $password, $name, $age")
+                                //Log.d("Registro", "Registro: $email, $password, $name, $age")
+                                DataUsers.addClient(
+                                    Cliente(
+                                        "Cliente",
+                                        name,
+                                        age,
+                                        email,
+                                        password,
+                                        "none",
+                                        "none",
+                                        "none"
+                                    )
+                                )
                             }
                         }
 
