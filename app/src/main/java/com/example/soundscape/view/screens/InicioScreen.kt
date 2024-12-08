@@ -41,7 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.soundscape.R
-import com.example.soundscape.view.ProfileUser
+import com.example.soundscape.view.PerfilUsuario
 import com.example.soundscape.view.Reproductor
 
 
@@ -354,6 +354,6 @@ fun navigateReproductor(context: Context){
 }
 
 fun navigateProfileUser(context: Context) {
-    val intent = Intent(context, ProfileUser::class.java)
+    val intent = Intent(context, PerfilUsuario::class.java)
     context.startActivity(intent)
 }
