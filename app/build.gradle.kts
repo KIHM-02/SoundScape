@@ -65,4 +65,6 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended-android:1.7.5")
     //Controles de navegacion
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    //
 }

@@ -3,12 +3,9 @@ package com.example.soundscape.model
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.PlaylistAddCheckCircle
-import androidx.compose.material.icons.outlined.PlaylistPlay
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.soundscape.navegation.NavScreen
-import java.util.Vector
 
 sealed class Items_bottom_nav (
     val icon: ImageVector,
