@@ -1,62 +1,66 @@
 package com.example.soundscape.view
+import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
+import android.transition.Slide
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import com.example.soundscape.R
-import androidx.compose.ui.res.painterResource
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.semantics.ProgressBarRangeInfo
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.example.soundscape.R
 import com.example.soundscape.ui.theme.SoundScapeTheme
 import com.example.soundscape.ui.theme.Typography
-import java.time.format.TextStyle
 
 class Reproductor : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setContent {
-           SoundScapeTheme {
-               Surface(
-                   modifier = Modifier.fillMaxSize(),
-               ){
-                   Reproductor(name = "rels b", nameSong = "Sin mirar las señales")
-               }
-           }
-        }
+            setContent {
+                SoundScapeTheme {
+                    Surface(
+                        modifier = Modifier.fillMaxSize()
+                    ){
+                        Reproductor(name = "rels b", nameSong = "Sin mirar las señales")
+                    }
+            }
     }
 }
+}
+@Composable
+fun imageandname(name: String, modifier: Modifier = Modifier, image: Uri){
+    val context = LocalContext.current
+    val activity = context as? Activity
 
+
+}
 
 @Composable
 fun Reproductor(name: String, nameSong: String, modifier: Modifier = Modifier){
-    val fontSize = if (nameSong.length <= 10)
-    { 24.sp }
-    else if (nameSong.length <= 20) { 20.sp }
-    else { 16.sp }
+    val context = LocalContext.current
+    val activity = context as? Activity
+
         Box(modifier = Modifier
             .fillMaxSize()
             .background(Brush
@@ -68,21 +72,19 @@ fun Reproductor(name: String, nameSong: String, modifier: Modifier = Modifier){
                 )
             )
         ){Column {
+
+
         Image(
             painter = painterResource(R.drawable.applogo),
             contentDescription = "Contact profile picture",
             modifier = Modifier
                 .size(500.dp)
-                .padding(10.dp)
+                .padding(top = 10.dp)
         )
-
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
-
                 .fillMaxWidth()
-
-
         ){
             Text(
                 text = "$nameSong",
@@ -90,7 +92,6 @@ fun Reproductor(name: String, nameSong: String, modifier: Modifier = Modifier){
                 modifier = Modifier
                     .size(100.dp)
                     .weight(1f)
-
         )
 
             OutlinedButton(onClick = {
@@ -100,7 +101,6 @@ fun Reproductor(name: String, nameSong: String, modifier: Modifier = Modifier){
                     contentDescription = "Contact profile picture",
                     modifier = Modifier
                         .size(50.dp)
-                        .padding(10.dp)
                         .align(Alignment.CenterVertically)
                 )
             }
@@ -114,21 +114,17 @@ fun Reproductor(name: String, nameSong: String, modifier: Modifier = Modifier){
                 .padding(10.dp)
                 .align(Alignment.Start)
         )
-            LinearProgressIndicator(
-                progress = 0.5f,
+            Slider(
+                value = 0.5f,
+                onValueChange = {},
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
                     .align(Alignment.CenterHorizontally)
-                    .size(10.dp)
             )
             Row(
                 horizontalArrangement = Arrangement.SpaceAround,
                 modifier = Modifier
                     .fillMaxWidth()
-
                     .size(100.dp)
-                    .padding(10.dp)
             ){
                 OutlinedButton(onClick = { }){
                     Image(
@@ -173,5 +169,4 @@ fun Reproductor(name: String, nameSong: String, modifier: Modifier = Modifier){
 
         }
 }
-
 
