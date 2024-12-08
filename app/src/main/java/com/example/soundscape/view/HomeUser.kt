@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.soundscape.components.NavegacionInferior
 import com.example.soundscape.navegation.AppNavigation
@@ -32,7 +33,7 @@ class HomeUser : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @Preview
     @Composable
     fun MainScreen(){
         val navController = rememberNavController()
