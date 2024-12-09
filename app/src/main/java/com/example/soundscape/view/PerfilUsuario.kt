@@ -2,6 +2,7 @@ package com.example.soundscape.view
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -41,11 +43,14 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -54,6 +59,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.soundscape.R
+import com.example.soundscape.controller.DataMusic
 import com.example.soundscape.ui.theme.SoundScapeTheme
 import com.example.soundscape.view.screens.InicioScreen
 import com.example.soundscape.view.screens.navigateProfileUser
@@ -210,38 +216,8 @@ fun perfilUsuarioView(name: String, modifier: Modifier = Modifier) {
                 .padding(10.dp)
                 .align(Alignment.CenterHorizontally)
         )
-        LazyRow(
-            horizontalArrangement = Arrangement.SpaceBetween, // Espacio entre elementos
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .fillMaxWidth()
-        ) {
-            items(10) { // 3 elementos en la lista
-                Card(
-                    modifier = Modifier.size(width = 120.dp, height = 160.dp),
-                    elevation = CardDefaults.cardElevation(10.dp),
-                    border = BorderStroke(1.dp, Color.Cyan),
-                    colors = CardDefaults.cardColors(
-                        contentColor = Color.Black
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.portada_musica),
-                            contentDescription = ""
-                        )
-                        Text(
-                            "Cancion",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            modifier = Modifier.padding(5.dp)
-                        )
-                    }
-                }
-            }
-        }
+        listenedSong()
+
         HorizontalDivider(
             color = Color.Black,
             thickness = 1.dp,
@@ -298,6 +274,50 @@ fun perfilUsuarioView(name: String, modifier: Modifier = Modifier) {
 
     }
 }
+
+@Composable
+fun listenedSong(){
+    val musiclist = DataMusic.musicList
+    Box(
+        contentAlignment = Alignment.Center
+    ) {
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(10.dp) // Espacio entre elementos
+        ) {
+            items(musiclist) {music ->
+                Card(
+                    onClick = {},
+                    modifier = Modifier.size(width = 120.dp, height = 160.dp),
+                    elevation = CardDefaults.cardElevation(10.dp),
+                    border = BorderStroke(1.dp, Color.Cyan),
+                    colors = CardDefaults.cardColors(
+                        containerColor = Color(0xFF1F3D83)
+                    )
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        val imageBitmap = remember {
+                            BitmapFactory.decodeFile(music.image)
+                        }
+                        Image(
+                            painter = BitmapPainter(imageBitmap.asImageBitmap()),
+                            contentDescription = ""
+                        )
+                        Text(
+                            music.nameSong,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(5.dp),
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
