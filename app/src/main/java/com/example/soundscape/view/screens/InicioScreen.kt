@@ -1,8 +1,8 @@
 package com.example.soundscape.view.screens
 
-
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -29,11 +30,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,9 +45,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.soundscape.R
+import com.example.soundscape.controller.DataMusic
 import com.example.soundscape.view.PerfilUsuario
 import com.example.soundscape.view.Reproductor
-
 
 @Preview
 @Composable
@@ -141,13 +145,14 @@ fun topIconButtons(){
 
 @Composable
 fun listenedSong(){
+    val musiclist = DataMusic.musicList
     Box(
         contentAlignment = Alignment.Center
     ) {
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(10.dp) // Espacio entre elementos
         ) {
-            items(3) { // 3 elementos en la lista
+            items(musiclist) {music ->
                 Card(
                     onClick = {},
                     modifier = Modifier.size(width = 120.dp, height = 160.dp),
@@ -160,12 +165,15 @@ fun listenedSong(){
                     Column(
                         modifier = Modifier.fillMaxSize()
                     ) {
+                        val imageBitmap = remember {
+                            BitmapFactory.decodeFile(music.image)
+                        }
                         Image(
-                            painter = painterResource(id = R.drawable.portada_musica),
+                            painter = BitmapPainter(imageBitmap.asImageBitmap()),
                             contentDescription = ""
                         )
                         Text(
-                            "Cancion",
+                            music.nameSong,
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
                             modifier = Modifier.padding(5.dp),
@@ -180,39 +188,47 @@ fun listenedSong(){
 
 @Composable
 fun newSongs(){
-    Card (
-        onClick = {},
-        modifier = Modifier
-        .fillMaxWidth()
-        .height(160.dp),
-        elevation = CardDefaults.cardElevation(10.dp),
-        border = BorderStroke(1.dp, Color.Cyan),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF1F3D83)
-        )
-    ){
-        Row (
-            modifier = Modifier.fillMaxSize()
+    val musicList = DataMusic.musicList
+    val latestMusic = musicList.lastOrNull()
+    latestMusic?.let { music ->
+        Card (
+            onClick = {},
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(160.dp),
+            elevation = CardDefaults.cardElevation(10.dp),
+            border = BorderStroke(1.dp, Color.Cyan),
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFF1F3D83)
+            )
         ){
-            Image(painter = painterResource(id = R.drawable.portada_musica),
-                contentDescription = "")
-            Spacer(modifier = Modifier.width(5.dp))
-            Column {
-                val context = LocalContext.current
-                Text(
-                    "Cancion",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp,
-                    modifier = Modifier.padding(5.dp),
-                    color = Color.White
-                )
-                Spacer(modifier = Modifier.height(60.dp))
-                IconButton(onClick = {navigateReproductor(context)}) {
-                    Icon(painter = painterResource(id = R.drawable.play_button),
-                        contentDescription = "",
-                        modifier = Modifier.size(80.dp),
-                        tint = Color(0xFF1CA94B)
+            Row (
+                modifier = Modifier.fillMaxSize()
+            ){
+                val imageBitmap = remember{
+                    BitmapFactory.decodeFile(music.image)
+                }
+                Image(
+                    painter = BitmapPainter(imageBitmap.asImageBitmap()),
+                    contentDescription = "")
+                Spacer(modifier = Modifier.width(5.dp))
+                Column {
+                    val context = LocalContext.current
+                    Text(
+                        music.nameSong,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 30.sp,
+                        modifier = Modifier.padding(5.dp),
+                        color = Color.White
                     )
+                    Spacer(modifier = Modifier.height(60.dp))
+                    IconButton(onClick = {navigateReproductor(context)}) {
+                        Icon(painter = painterResource(id = R.drawable.play_button),
+                            contentDescription = "",
+                            modifier = Modifier.size(80.dp),
+                            tint = Color(0xFF1CA94B)
+                        )
+                    }
                 }
             }
         }
@@ -247,12 +263,13 @@ fun listenedPlaylist(){
                     Column {
                         val context = LocalContext.current
                         Text(
-                            "Playlist",
+                            "Un poco de todo",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 26.sp,
+                            fontSize = 20.sp,
                             color = Color.White)
-                        Spacer(modifier = Modifier.width(19.dp))
-                        Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum",
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum",
                             color = Color.White)
                         Spacer(modifier = Modifier.height(31.dp))
                         IconButton(onClick = { navigateReproductor(context) }) {
