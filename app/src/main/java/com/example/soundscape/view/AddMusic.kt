@@ -16,6 +16,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -31,16 +33,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.soundscape.controller.DataMusic
 import com.example.soundscape.model.Music
 import com.example.soundscape.ui.theme.SoundScapeTheme
+import com.example.soundscape.view.screens.backgroundGradient
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class AddMusic : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,19 +83,27 @@ fun AddSongScreen() {
     var duration by remember { mutableStateOf("") }
     var filePath by remember { mutableStateOf("") }
     val uri = "android.resource://com.example.soundscape/raw/"
+    val gradientColorList = listOf(
+        Color(0xFF1F3D83), // Azul Marino
+        Color(0xFF097CBF)  // Azul Cielo
+    )
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0D47A1))
+            .background(brush = backgroundGradient(
+                isVerticalGradient = true,
+                colors = gradientColorList
+            ))
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "Agregar Canción",
-            fontSize = 24.sp,
-            color = Color.White
+            fontSize = 28.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedTextField(
@@ -135,7 +151,9 @@ fun menuDesplegable(
     val musicGender = listOf("Unknown", "Rock", "Pop", "Reggae")
     var expandedState by remember { mutableStateOf(false) }
     var selectedOption by remember { mutableStateOf(musicGender[0]) }
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Elige el género", fontSize = 28.sp, color = Color.White)
         Spacer(modifier = Modifier.height(5.dp))
         ExposedDropdownMenuBox(
@@ -171,57 +189,74 @@ fun menuDesplegable(
 
 @Composable
 fun addImage(onImageSelected: (String) -> Unit) {
-    var selectedImagePath by remember { mutableStateOf("") }
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            val filePath = getRealPathFromURI(context, it)
-            selectedImagePath = filePath ?: ""
-            onImageSelected(selectedImagePath)
-        }
+        selectedImageUri = uri
     }
 
     Column {
-        Button(onClick = {
-            launcher.launch("image/*")
-        }) {
-            Text("Seleccionar Imagen")
+        Button(onClick = { launcher.launch("image/*") },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1CA94B))) {
+            Text("Seleccionar Imagen", fontSize = 18.sp)
         }
 
-        if (selectedImagePath.isNotEmpty()) {
-            val bitmap = BitmapFactory.decodeFile(selectedImagePath)
-            Image(
-                bitmap = bitmap.asImageBitmap(),
-                contentDescription = "Imagen seleccionada",
-                modifier = Modifier.size(100.dp)
-            )
+        selectedImageUri?.let { uri ->
+            val imageFileName = "image_${System.currentTimeMillis()}.jpg" // Unique filename
+            val imageFilePath = context.filesDir.absolutePath + "/" + imageFileName
+
+            try {
+                val inputStream = context.contentResolver.openInputStream(uri)
+                val outputStream = FileOutputStream(File(imageFilePath))
+
+                inputStream?.use { input ->
+                    outputStream.use { output ->
+                        input.copyTo(output)
+                    }
+                }
+
+                onImageSelected(imageFilePath) // Pass the internal file path
+            } catch (e: IOException) {
+                // Handle error
+            }
         }
     }
 }
 
 @Composable
 fun addMp3(onMp3Selected: (String) -> Unit) {
-    var selectedMp3Path by remember { mutableStateOf("") }
+    var selectedMp3Uri by remember { mutableStateOf<Uri?>(null) }
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            val filePath = getRealPathFromURI(context, it)
-            selectedMp3Path = filePath ?: ""
-            onMp3Selected(selectedMp3Path)
-        }
+        selectedMp3Uri = uri
     }
 
     Column {
-        Button(onClick = {
-            launcher.launch("audio/*")
-        }) {
-            Text("Seleccionar Archivo MP3")
+        Button(onClick = { launcher.launch("audio/*") },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1CA94B))) {
+            Text("Seleccionar Archivo MP3", fontSize = 18.sp)
         }
 
-        if (selectedMp3Path.isNotEmpty()) {
-            Text(text = "Archivo seleccionado: $selectedMp3Path", color = Color.White)
+        selectedMp3Uri?.let { uri ->
+            val mp3FileName = "audio_${System.currentTimeMillis()}.mp3" // Unique filename
+            val mp3FilePath = context.filesDir.absolutePath + "/" + mp3FileName
+
+            try {
+                val inputStream = context.contentResolver.openInputStream(uri)
+                val outputStream = FileOutputStream(File(mp3FilePath))
+
+                inputStream?.use { input ->
+                    outputStream.use { output ->
+                        input.copyTo(output)
+                    }
+                }
+
+                onMp3Selected(mp3FilePath) // Pass the internal file path
+            } catch (e: IOException) {
+                // Handle error
+            }
         }
     }
 }
@@ -231,8 +266,11 @@ fun saveData(songName: String, artistName: String, genre: String, image: String,
     var showDialog by remember { mutableStateOf(false) }
 
     Column {
-        Button(onClick = { showDialog = true }) { // Show dialog on click
-            Text("Guardar")
+        // Show dialog on click
+        Button(onClick = { showDialog = true },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1CA94B)))
+        {
+            Text("Guardar", fontSize = 18.sp)
         }
 
         if (showDialog) {
