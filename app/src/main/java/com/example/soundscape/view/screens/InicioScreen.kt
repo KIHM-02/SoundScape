@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.soundscape.R
 import com.example.soundscape.controller.DataMusic
+import com.example.soundscape.model.Music
 import com.example.soundscape.view.PerfilUsuario
 import com.example.soundscape.view.Reproductor
 
@@ -134,7 +135,7 @@ fun backgroundGradient(
 fun topIconButtons(){
     val context = LocalContext.current
     Row(modifier = Modifier.fillMaxWidth()) {
-        IconButton(onClick = {navigateProfileUser(context)}) {
+        IconButton(onClick = {navigateProfileUser(context, 0, DataMusic.musicList as ArrayList<Music>)}) {
             Icon(imageVector = Icons.Outlined.AccountCircle,
                 contentDescription = "",
                 tint = Color.White,
@@ -222,7 +223,7 @@ fun newSongs(){
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.height(60.dp))
-                    IconButton(onClick = {navigateReproductor(context)}) {
+                    IconButton(onClick = {navigateReproductor(context, 0, musicList as ArrayList<Music>)}) {
                         Icon(painter = painterResource(id = R.drawable.play_button),
                             contentDescription = "",
                             modifier = Modifier.size(80.dp),
@@ -253,7 +254,7 @@ fun listenedPlaylist(){
                 border = BorderStroke(1.dp, Color.Cyan),
                 colors = CardDefaults.cardColors(containerColor = Color(0xFF1F3D83)),
 
-            ) {
+                ) {
                 Row {
                     Image(
                         painter = painterResource(id = R.drawable.portada_musica),
@@ -272,7 +273,7 @@ fun listenedPlaylist(){
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum",
                             color = Color.White)
                         Spacer(modifier = Modifier.height(31.dp))
-                        IconButton(onClick = { navigateReproductor(context) }) {
+                        IconButton(onClick = { navigateReproductor(context, 0, DataMusic.musicList as ArrayList<Music>) }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.play_button),
                                 contentDescription = "",
@@ -287,12 +288,17 @@ fun listenedPlaylist(){
     }
 }
 
-fun navigateReproductor(context: Context){
+fun navigateReproductor(context: Context, position: Int, songs: ArrayList<Music>) {
     val intent = Intent(context, Reproductor::class.java)
+    intent.putExtra("position", position)
+    intent.putExtra("songs", songs)
     context.startActivity(intent)
 }
 
-fun navigateProfileUser(context: Context) {
-    val intent = Intent(context, PerfilUsuario::class.java)
+
+fun navigateProfileUser (context: Context, position: Int, songs: ArrayList<Music>) {
+    val intent = Intent(context, Reproductor::class.java)
+    intent.putExtra("position", position)
+    intent.putExtra("songs", songs)
     context.startActivity(intent)
 }

@@ -1,6 +1,7 @@
 package com.example.soundscape.view.screens
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -37,6 +39,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -45,6 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.soundscape.R
+import com.example.soundscape.controller.DataMusic
 import com.example.soundscape.view.Reproductor
 
 @Preview
@@ -79,6 +84,7 @@ fun listaPlaylist(){
             Color(0xFF097CBF), //Azul Cielo
             Color(0xFF2AC49E) //Cian
         )
+        val musicList = DataMusic.musicList
         Image(painter = painterResource(id = R.drawable.portada_musica),
             contentDescription = "",
             modifier = Modifier.fillMaxWidth().height(220.dp))
@@ -90,19 +96,20 @@ fun listaPlaylist(){
             Text("Buscador va aqui", fontSize = 25.sp, color = Color.White)
         }
         LazyColumn (verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            items (10) {
+            items (musicList) {music ->
                 Row (modifier = Modifier.fillMaxWidth()
-                        .background(brush = backgroundGradientList(isVerticalGradient = false,
-                    colors = gradienteColorList))
+                    .background(brush = backgroundGradientList(isVerticalGradient = false,
+                        colors = gradienteColorList))
                 ){
                     Box(modifier = Modifier.weight(1f).padding(5.dp)){
                         Row {
                             Spacer(modifier = Modifier.width(1.dp))
-                            Image(painter = painterResource(id = R.drawable.portada_musica),
+                            val imageBitmap = BitmapFactory.decodeFile(music.image)
+                            Image(painter = BitmapPainter(imageBitmap.asImageBitmap()),
                                 contentDescription = "",
                                 modifier = Modifier.size(50.dp).clip(CircleShape))
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Cancion",
+                            Text("${music.nameSong}",
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.White)
@@ -141,5 +148,5 @@ fun backgroundGradientList(
         colors = colors,
         start = Offset.Zero,
         end = endOffset
-    )
+        )
 }
