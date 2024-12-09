@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.soundscape"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -65,6 +65,5 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended-android:1.7.5")
     //Controles de navegacion
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-
-    //
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
 }

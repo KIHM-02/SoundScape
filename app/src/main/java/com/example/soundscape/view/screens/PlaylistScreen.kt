@@ -90,7 +90,7 @@ fun listaPlaylist(){
             Text("Buscador va aqui", fontSize = 25.sp, color = Color.White)
         }
         LazyColumn (verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            items (5) {
+            items (10) {
                 Row (modifier = Modifier.fillMaxWidth()
                         .background(brush = backgroundGradientList(isVerticalGradient = false,
                     colors = gradienteColorList))
