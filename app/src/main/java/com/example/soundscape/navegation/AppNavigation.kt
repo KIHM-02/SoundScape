@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.soundscape.view.screens.BuscadorScreen
+import com.example.soundscape.view.BuscadorScreen
 import com.example.soundscape.view.screens.HomeScreen
 import com.example.soundscape.view.screens.InicioScreen
 import com.example.soundscape.view.screens.PlaylistsScreen
