@@ -1,13 +1,13 @@
 package com.example.soundscape.view
 
+import android.content.Intent
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -46,110 +47,107 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.soundscape.R
 import com.example.soundscape.controller.DataUsers
 import com.example.soundscape.model.Cliente
 import com.example.soundscape.ui.theme.SoundScapeTheme
 
 class Login : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            SoundScapeTheme {
-                //True = Login ; False = Register
-                val showLoginForm = rememberSaveable { mutableStateOf(true) }
+            Content()
+        }
+    }
 
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .background(Brush
-                        .verticalGradient(
-                            colors = listOf(
-                                MaterialTheme.colorScheme.primary,
-                                MaterialTheme.colorScheme.secondary
-                            )
+    @Composable
+    private fun Content()
+    {
+        SoundScapeTheme {
+            //True = Login ; False = Register
+            val showLoginForm = rememberSaveable { mutableStateOf(true) }
+
+            Box(modifier = Modifier
+                .fillMaxSize()
+                .background(Brush
+                    .verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.secondary
                         )
                     )
-                ){
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        if(showLoginForm.value)
+                )
+            ){
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    if(showLoginForm.value)
+                    {
+                        Image(
+                            painter = painterResource(id = R.drawable.applogo),
+                            contentDescription = "Logo",
+                            modifier = Modifier
+                                .size(300.dp)
+                                .clip(CircleShape)
+                        )
+
+                        Spacer(modifier = Modifier.height(50.dp))
+
+                        UserForm(isCreateAccount = false)
                         {
-                            Image(
-                                painter = painterResource(id = R.drawable.applogo),
-                                contentDescription = "Logo",
-                                modifier = Modifier
-                                    .size(300.dp)
-                                    .clip(CircleShape)
-                            )
-
-                            Spacer(modifier = Modifier.height(50.dp))
-
-                            UserForm(isCreateAccount = false)
-                            {
-                                email, password, name, age ->
+                            email, password, name, age ->
                                 Log.d("Login", "Login: $email, $password, $name, $age")
-                            }
                         }
-                        else
+                    }
+                    else
+                    {
+                        Text(
+                            text  = "Cree una cuenta",
+                            color = MaterialTheme.colorScheme.tertiary,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                        UserForm(isCreateAccount = true)
                         {
-                            Text(
-                                text  = "Cree una cuenta",
-                                color = MaterialTheme.colorScheme.tertiary,
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Bold
-                            )
-                            UserForm(isCreateAccount = true)
-                            {
-                                email, password, name, age ->
-                                //Log.d("Registro", "Registro: $email, $password, $name, $age")
-                                DataUsers.addClient(
-                                    Cliente(
-                                        "Cliente",
-                                        name,
-                                        age,
-                                        email,
-                                        password,
-                                        "none",
-                                        "none",
-                                        "none",
-
-                                    )
-                                )
-                            }
-                        }
-
-                        //Seccion de registro
-                        Spacer(modifier = Modifier.padding(15.dp))
-
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically
-                        ){
-                            val labelLogin = if(showLoginForm.value) "¿No tienes cuenta?"
-                                else "¿Ya tienes cuenta?"
-                            val labelRegister = if(showLoginForm.value) "Registrate"
-                                else "Inicia sesión"
-
-                            Text(text = labelLogin)
-                            Text(text = labelRegister,
-                                modifier = Modifier
-                                    .clickable { showLoginForm.value = !showLoginForm.value }
-                                    .padding(start = 5.dp),
-                                color = MaterialTheme.colorScheme.tertiary
-                            )
+                            email, password, name, age ->
+                                Log.d("Registro", "Registro: $email, $password, $name, $age")
                         }
                     }
 
+                    //Seccion de registro
+                    Spacer(modifier = Modifier.padding(15.dp))
+
+                    Row(
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        val labelLogin = if(showLoginForm.value) "¿No tienes cuenta?"
+                        else "¿Ya tienes cuenta?"
+                        val labelRegister = if(showLoginForm.value) "Registrate"
+                        else "Inicia sesión"
+
+                        Text(
+                            text = labelLogin,
+                            fontSize = 20.sp)
+                        Text(text = labelRegister,
+                            modifier = Modifier
+                                .clickable { showLoginForm.value = !showLoginForm.value }
+                                .padding(start = 5.dp),
+                            color = MaterialTheme.colorScheme.tertiary,
+                            fontSize = 20.sp,
+                        )
+                    }
                 }
 
             }
+
         }
     }
+
 
     @Composable
     private fun UserForm(
@@ -161,6 +159,7 @@ class Login : ComponentActivity() {
         val age = rememberSaveable { mutableStateOf("") }
         val password = rememberSaveable { mutableStateOf("") }
         val passwordVisibility = rememberSaveable { mutableStateOf(false) }
+        val context = LocalContext.current
 
         val allDataIsCaptured = remember(email.value, password.value) {
             email.value.trim().isNotEmpty() &&
@@ -182,7 +181,7 @@ class Login : ComponentActivity() {
             if(isCreateAccount)
             {
                 NameInput(nameState = name)
-                
+
                 AgeInput(ageState = age)
             }
 
@@ -195,19 +194,37 @@ class Login : ComponentActivity() {
 
                 if(isCreateAccount)
                 {
-                    onDone(
+//                    onDone(
+//                        email.value.trim(),
+//                        password.value.trim(),
+//                        name.value.trim(),
+//                        age.value.toInt())
+                    val added = DataUsers.isClient(
                         email.value.trim(),
                         password.value.trim(),
                         name.value.trim(),
                         age.value.toInt())
+
+                    if(added)
+                        Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
                 }
                 else
                 {
-                    onDone(
-                        email.value.trim(),
-                        password.value.trim(),
-                        "none",
-                        0)
+                    try {
+                        val (isValid, targetClass) = DataUsers.verifyUser(
+                            email.value.trim(),
+                            password.value.trim()
+                        )
+                        if (isValid && targetClass != null) {
+                            val intent = Intent(context, targetClass.java)
+                            context.startActivity(intent)
+                        } else {
+                            Log.d("Login", "Usuario o contraseña incorrectos")
+                            Toast.makeText(context, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(context, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 keyboardController?.hide()
@@ -230,7 +247,7 @@ class Login : ComponentActivity() {
     private @Composable
     fun NameInput(
         nameState: MutableState<String>,
-        labelId: String = "Nombre") 
+        labelId: String = "Nombre")
     {
         InputField(
             valueState = nameState,
@@ -267,7 +284,9 @@ class Login : ComponentActivity() {
         OutlinedTextField(
             value = passwordState.value,
             onValueChange = {passwordState.value = it},
-            label = {Text(text= labelId)},
+            label = {Text(
+                text= labelId,
+                fontSize = 20.sp)},
             singleLine = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
@@ -311,8 +330,13 @@ class Login : ComponentActivity() {
         OutlinedTextField(
             value = valueState.value,
             onValueChange = {valueState.value = it},
-            label = {Text(text = labelId)},
-            textStyle = TextStyle(color = Color.White, fontWeight = FontWeight.Normal),
+            label = {Text(
+                text = labelId,
+                fontSize = 20.sp)},
+            textStyle = TextStyle(
+                color = Color.White,
+                fontWeight = FontWeight.Normal,
+                fontSize = 20.sp),
             singleLine = isSingleLine,
             modifier = Modifier
                 .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
@@ -334,85 +358,7 @@ class Login : ComponentActivity() {
         uiMode = Configuration.UI_MODE_NIGHT_YES)
     @Composable
     fun LoginPreview(){
-        SoundScapeTheme {
-            //True = Login ; False = Register
-            val showLoginForm = rememberSaveable { mutableStateOf(true) }
-
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .background(Brush
-                    .verticalGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.primary,
-                            MaterialTheme.colorScheme.secondary
-                        )
-                    )
-                )
-            ){
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    if(showLoginForm.value)
-                    {
-                        Image(
-                            painter = painterResource(id = R.drawable.applogo),
-                            contentDescription = "Logo",
-                            modifier = Modifier
-                                .size(300.dp)
-                                .clip(CircleShape)
-                        )
-
-                        Spacer(modifier = Modifier.height(50.dp))
-
-                        UserForm(isCreateAccount = false)
-                        {
-                                email, password, name, age ->
-                            Log.d("Login", "Login: $email, $password, $name, $age")
-                        }
-                    }
-                    else
-                    {
-                        Text(
-                            text  = "Cree una cuenta",
-                            color = MaterialTheme.colorScheme.tertiary,
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold
-                        )
-                        UserForm(isCreateAccount = true)
-                        {
-                                email, password, name, age ->
-                            Log.d("Registro", "Registro: $email, $password, $name, $age")
-                        }
-                    }
-
-                    //Seccion de registro
-                    Spacer(modifier = Modifier.padding(15.dp))
-
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        val labelLogin = if(showLoginForm.value) "¿No tienes cuenta?"
-                        else "¿Ya tienes cuenta?"
-                        val labelRegister = if(showLoginForm.value) "Registrate"
-                        else "Inicia sesión"
-
-                        Text(text = labelLogin)
-                        Text(text = labelRegister,
-                            modifier = Modifier
-                                .clickable { showLoginForm.value = !showLoginForm.value }
-                                .padding(start = 5.dp),
-                            color = MaterialTheme.colorScheme.tertiary
-                        )
-                    }
-                }
-
-            }
-
-        }
+        Content()
     }
-
 }
 

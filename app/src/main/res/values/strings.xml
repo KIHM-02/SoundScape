@@ -4,4 +4,5 @@
     <string name="title_activity_register">Register</string>
     <string name="title_activity_reproductor">Reproductor</string>
     <string name="title_activity_perfil_usuario">PerfilUsuario</string>
+    <string name="title_activity_home_admin">HomeAdmin</string>
 </resources>
