@@ -138,7 +138,9 @@ class HomeAdmin : ComponentActivity() {
                 LazyColumn (
                     //horizontalArrangement = Arrangement.spacedBy(10.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier.padding(10.dp)
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .size(width = 200.dp, height = 250.dp)
                 ){
                     items(usuarios){ usuario ->
                         Card(

@@ -26,6 +26,12 @@
         </activity>
 
         <activity
+            android:name=".view.AddMusic"
+            android:exported="false"
+            android:label="AddMusica"
+            android:theme="@style/Theme.SoundScape" />
+
+        <activity
             android:name=".view.Reproductor"
             android:exported="false"
             android:label="@string/title_activity_reproductor"
