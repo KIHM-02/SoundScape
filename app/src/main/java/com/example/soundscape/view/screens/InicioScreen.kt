@@ -289,6 +289,7 @@ fun listenedPlaylist(){
 
 fun navigateReproductor(context: Context){
     val intent = Intent(context, Reproductor::class.java)
+    intent.putExtra("position", 0)
     context.startActivity(intent)
 }
 
