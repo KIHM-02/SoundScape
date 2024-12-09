@@ -1,159 +1,157 @@
+
 package com.example.soundscape.view
-import android.app.Activity
-import android.net.Uri
 import android.os.Bundle
-import android.transition.Slide
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Slider
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.example.soundscape.R
+import com.example.soundscape.model.Music
 import com.example.soundscape.ui.theme.SoundScapeTheme
 import com.example.soundscape.ui.theme.Typography
+
+
 
 class Reproductor : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-            setContent {
-                SoundScapeTheme {
-                    Surface(
-                        modifier = Modifier.fillMaxSize()
-                    ){
-                        Reproductor(name = "rels b", nameSong = "Sin mirar las señales")
-                    }
+
+        val position = intent.getIntExtra("position", 0)
+        val songs = intent.getSerializableExtra("songs") as? ArrayList<Music> ?: arrayListOf()
+        setContent {
+            SoundScapeTheme {
+                ReproductorScreen(songs , position)
             }
+        }
     }
 }
-}
-@Composable
-fun imageandname(name: String, modifier: Modifier = Modifier, image: Uri){
-    val context = LocalContext.current
-    val activity = context as? Activity
-
-
-}
 
 @Composable
-fun Reproductor(name: String, nameSong: String, modifier: Modifier = Modifier){
-    val context = LocalContext.current
-    val activity = context as? Activity
+fun ReproductorScreen(songs: List<Music>, currentPosition: Int) {
+    var currentSongIndex by remember { mutableStateOf(currentPosition) }
+    var isPlaying by remember { mutableStateOf(false) }
+    var progress by remember { mutableStateOf(0f) }
+    val currentSong = songs[currentSongIndex]
+    val totalDuration = 300f // Duración total en segundos
 
-        Box(modifier = Modifier
+    // Simula el progreso de la canción
+    LaunchedEffect(isPlaying) {
+        while (isPlaying && progress < totalDuration) {
+            kotlinx.coroutines.delay(1000L) // Espera 1 segundo
+            progress += 1f
+        }
+    }
+
+    Box(
+        modifier = Modifier
             .fillMaxSize()
-            .background(Brush
-                .verticalGradient(
+            .background(
+                Brush.verticalGradient(
                     colors = listOf(
                         MaterialTheme.colorScheme.primary,
                         MaterialTheme.colorScheme.secondary
                     )
                 )
             )
-        ){Column {
-
-
-        Image(
-            painter = painterResource(R.drawable.applogo),
-            contentDescription = "Contact profile picture",
+    ) {
+        Column(
             modifier = Modifier
-                .size(500.dp)
-                .padding(top = 10.dp)
-        )
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-        ){
-            Text(
-                text = "$nameSong",
-                style = MaterialTheme.typography.titleLarge,
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = rememberImagePainter(data = currentSong.image),
+                contentDescription = currentSong.nameSong,
                 modifier = Modifier
-                    .size(100.dp)
-                    .weight(1f)
-        )
-
-            OutlinedButton(onClick = {
-            }) {
-                Image(
-                    painter = painterResource(R.drawable.favorite),
-                    contentDescription = "Contact profile picture",
-                    modifier = Modifier
-                        .size(50.dp)
-                        .align(Alignment.CenterVertically)
-                )
-            }
-        }
-
-
-        Text(
-            text = " $name",
-            style = Typography.bodyLarge,
-            modifier = modifier
-                .padding(10.dp)
-                .align(Alignment.Start)
-        )
-            Slider(
-                value = 0.5f,
-                onValueChange = {},
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
+                    .size(300.dp)
+                    .padding(top = 10.dp, bottom = 10.dp)
             )
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = currentSong.nameSong,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .weight(1f)
+                )
+
+                OutlinedButton(onClick = { /* Acción del botón */ }) {
+                    Image(
+                        painter = painterResource(R.drawable.favorite),
+                        contentDescription = "Favorite",
+                        modifier = Modifier
+                            .size(50.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+                }
+            }
+
+            Text(
+                text = currentSong.nameArtist,
+                style = Typography.bodyLarge,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .align(Alignment.Start)
+            )
+
+            Slider(
+                value = progress,
+                onValueChange = { newProgress ->
+                    progress = newProgress
+                },
+                valueRange = 0f..totalDuration,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
             Row(
                 horizontalArrangement = Arrangement.SpaceAround,
                 modifier = Modifier
                     .fillMaxWidth()
                     .size(100.dp)
-            ){
-                OutlinedButton(onClick = { }){
+            ) {
+                OutlinedButton(onClick = {
+                    if (currentSongIndex > 0) currentSongIndex--
+                }) {
                     Image(
-                        painter= painterResource(R.drawable.previous),
-                        contentDescription = "Contact profile picture",
-                        modifier = Modifier
-                            .size(50.dp)
-                            .padding(10.dp)
-                            .align(Alignment.CenterVertically)
-                            .border(0.dp, MaterialTheme.colorScheme.tertiary)
-                    )
-
-                }
-                OutlinedButton(onClick = {}){
-                    Image(
-                        painter= painterResource(R.drawable.play),
-                        contentDescription = "Contact profile picture",
+                        painter = painterResource(R.drawable.previous),
+                        contentDescription = "Previous",
                         modifier = Modifier
                             .size(50.dp)
                             .padding(10.dp)
                             .align(Alignment.CenterVertically)
                     )
                 }
-
-
-                OutlinedButton(onClick = { }){
+                OutlinedButton(onClick = { isPlaying = !isPlaying }) {
                     Image(
-                        painter= painterResource(R.drawable.next),
-                        contentDescription = "Contact profile picture",
+                        painter = painterResource(if (isPlaying) R.drawable.pause else R.drawable.play),
+                        contentDescription = if (isPlaying) "Pause" else "Play",
+                        modifier = Modifier
+                            .size(50.dp)
+                            .padding(10.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+                }
+                OutlinedButton(onClick = {
+                    if (currentSongIndex < songs.size - 1) currentSongIndex++
+                }) {
+                    Image(
+                        painter = painterResource(R.drawable.next),
+                        contentDescription = "Next",
                         modifier = Modifier
                             .size(50.dp)
                             .padding(10.dp)
@@ -161,12 +159,6 @@ fun Reproductor(name: String, nameSong: String, modifier: Modifier = Modifier){
                     )
                 }
             }
-
-    }
-
-
-
-
         }
+    }
 }
-
