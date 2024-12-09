@@ -1,11 +1,15 @@
 package com.example.soundscape.components
 
+import androidx.compose.foundation.background
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.example.soundscape.model.Items_bottom_nav.*
 import com.example.soundscape.navegation.currentRoute
@@ -19,8 +23,9 @@ fun NavegacionInferior(
         Item_botton_nav2,
         Item_botton_nav3
     )
-    BottomAppBar {
-        NavigationBar {
+    val gradientBrush = Brush.verticalGradient(colors = listOf(Color(0xFF097CBF),Color(0xFF1CA94B)))
+    BottomAppBar (containerColor = Color.Blue, modifier = Modifier.background(gradientBrush)){
+        NavigationBar(containerColor = Color.Transparent) {
             menu_items.forEach{item->
                 val selected = currentRoute(navController) == item.route
                 NavigationBarItem(

@@ -43,7 +43,6 @@ fun BuscadorScreen() {
     ) {
         searchBar()
     }
-
 }
 
 @Composable

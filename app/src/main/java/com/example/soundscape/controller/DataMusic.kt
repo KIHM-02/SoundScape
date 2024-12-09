@@ -7,8 +7,6 @@ object DataMusic {
 
     val musicList = ArrayList<Music>()
 
-
-
     fun addMusic(music: Music) {
         musicList.add(music)
         Log.d("DataMusic", "Music added: $music")
@@ -21,8 +19,4 @@ object DataMusic {
     fun removeMusicByName(nameSong: String): Boolean {
         return musicList.removeIf { it.nameSong == nameSong }
     }
-
-
-
-
 }

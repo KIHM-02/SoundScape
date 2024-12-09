@@ -41,7 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.soundscape.R
-import com.example.soundscape.view.ProfileUser
+import com.example.soundscape.view.PerfilUsuario
 import com.example.soundscape.view.Reproductor
 
 
@@ -97,35 +97,7 @@ fun InicioScreen() {
                     }
                 }
             }
-            item { Spacer(modifier = Modifier.height(20.dp)) }
-            item {
-                Column {
-                    Text(
-                        "Artistas Nuevos",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    Row {
-                        newArtist()
-                    }
-                }
-            }
-            item { Spacer(modifier = Modifier.height(20.dp)) }
-            item {
-                Column {
-                    Text(
-                        "Nuevos Lanzaminetos",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                    Row {
-                        newReleases()
-                    }
-                }
-            }
+
             item { Spacer(modifier = Modifier.height(20.dp)) }
             item {
                 Column {
@@ -177,11 +149,12 @@ fun listenedSong(){
         ) {
             items(3) { // 3 elementos en la lista
                 Card(
+                    onClick = {},
                     modifier = Modifier.size(width = 120.dp, height = 160.dp),
                     elevation = CardDefaults.cardElevation(10.dp),
                     border = BorderStroke(1.dp, Color.Cyan),
                     colors = CardDefaults.cardColors(
-                        contentColor = Color.Black
+                        containerColor = Color(0xFF1F3D83)
                     )
                 ) {
                     Column(
@@ -195,7 +168,8 @@ fun listenedSong(){
                             "Cancion",
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
-                            modifier = Modifier.padding(5.dp)
+                            modifier = Modifier.padding(5.dp),
+                            color = Color.White
                         )
                     }
                 }
@@ -206,13 +180,15 @@ fun listenedSong(){
 
 @Composable
 fun newSongs(){
-    Card (modifier = Modifier
+    Card (
+        onClick = {},
+        modifier = Modifier
         .fillMaxWidth()
         .height(160.dp),
         elevation = CardDefaults.cardElevation(10.dp),
         border = BorderStroke(1.dp, Color.Cyan),
         colors = CardDefaults.cardColors(
-            contentColor = Color.Black
+            containerColor = Color(0xFF1F3D83)
         )
     ){
         Row (
@@ -227,46 +203,15 @@ fun newSongs(){
                     "Cancion",
                     fontWeight = FontWeight.Bold,
                     fontSize = 30.sp,
-                    modifier = Modifier.padding(5.dp)
+                    modifier = Modifier.padding(5.dp),
+                    color = Color.White
                 )
                 Spacer(modifier = Modifier.height(60.dp))
                 IconButton(onClick = {navigateReproductor(context)}) {
                     Icon(painter = painterResource(id = R.drawable.play_button),
                         contentDescription = "",
-                        modifier = Modifier.size(80.dp)
-                        )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun newArtist(){
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(10.dp) // Espacio entre elementos
-    ) {
-        items(3) { // 3 elementos en la lista
-            Card(
-                modifier = Modifier.size(width = 120.dp, height = 160.dp),
-                elevation = CardDefaults.cardElevation(10.dp),
-                border = BorderStroke(1.dp, Color.Cyan),
-                colors = CardDefaults.cardColors(
-                    contentColor = Color.Black
-                )
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.portada_musica),
-                        contentDescription = ""
-                    )
-                    Text(
-                        "Artista",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(5.dp)
+                        modifier = Modifier.size(80.dp),
+                        tint = Color(0xFF1CA94B)
                     )
                 }
             }
@@ -274,50 +219,24 @@ fun newArtist(){
     }
 }
 
-@Composable
-fun newReleases(){
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(10.dp) // Espacio entre elementos
-    ) {
-        items(3) { // 3 elementos en la lista
-            Card(
-                modifier = Modifier.size(width = 120.dp, height = 160.dp),
-                elevation = CardDefaults.cardElevation(10.dp),
-                border = BorderStroke(1.dp, Color.Cyan),
-                colors = CardDefaults.cardColors(
-                    contentColor = Color.Black
-                )
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.portada_musica),
-                        contentDescription = ""
-                    )
-                    Text(
-                        "Cancion",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(5.dp)
-                    )
-                }
-            }
-        }
-    }
-}
 
 @Composable
 fun listenedPlaylist(){
     Box(modifier = Modifier.fillMaxWidth()) {
         Column {
+            Text("Ultima Playlist Escuchada",
+                fontSize = 26.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold)
             Card(
+                onClick = {},
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(160.dp),
                 elevation = CardDefaults.cardElevation(10.dp),
                 border = BorderStroke(1.dp, Color.Cyan),
-                colors = CardDefaults.cardColors(contentColor = Color.Black)
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF1F3D83)),
+
             ) {
                 Row {
                     Image(
@@ -330,15 +249,18 @@ fun listenedPlaylist(){
                         Text(
                             "Playlist",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 26.sp)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum")
+                            fontSize = 26.sp,
+                            color = Color.White)
+                        Spacer(modifier = Modifier.width(19.dp))
+                        Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In condimentum",
+                            color = Color.White)
                         Spacer(modifier = Modifier.height(31.dp))
                         IconButton(onClick = { navigateReproductor(context) }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.play_button),
                                 contentDescription = "",
-                                modifier = Modifier.size(80.dp)
+                                modifier = Modifier.size(80.dp),
+                                tint = Color(0xFF1CA94B)
                             )
                         }
                     }
@@ -354,6 +276,6 @@ fun navigateReproductor(context: Context){
 }
 
 fun navigateProfileUser(context: Context) {
-    val intent = Intent(context, ProfileUser::class.java)
+    val intent = Intent(context, PerfilUsuario::class.java)
     context.startActivity(intent)
 }
