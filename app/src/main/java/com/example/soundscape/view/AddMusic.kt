@@ -282,7 +282,7 @@ fun saveData(songName: String, artistName: String, genre: String, image: String,
                     Button(onClick = {
                         val music = Music(songName, artistName, image, duration, genre, uri)
                         DataMusic.addMusic(music)
-                        Log.d("AddMusic", "Music added: $music")
+                        Log.d("AddMusic", "Music added: $music & $uri")
                         showDialog = false // Dismiss dialog after saving
                     }) {
                         Text("Guardar")

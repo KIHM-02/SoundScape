@@ -99,8 +99,8 @@ fun searchBar() {
             .background(Color.White)
     )
 
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.padding(10.dp)
     ) {
         items(cancionesFiltradas) { cancion ->

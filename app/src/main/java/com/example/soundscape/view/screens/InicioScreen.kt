@@ -297,7 +297,7 @@ fun navigateReproductor(context: Context, position: Int, songs: ArrayList<Music>
 
 
 fun navigateProfileUser (context: Context, position: Int, songs: ArrayList<Music>) {
-    val intent = Intent(context, Reproductor::class.java)
+    val intent = Intent(context, PerfilUsuario::class.java)
     intent.putExtra("position", position)
     intent.putExtra("songs", songs)
     context.startActivity(intent)
