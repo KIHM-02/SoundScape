@@ -24,7 +24,7 @@ fun NavegacionInferior(
         Item_botton_nav3
     )
     val gradientBrush = Brush.verticalGradient(colors = listOf(Color(0xFF097CBF),Color(0xFF1CA94B)))
-    BottomAppBar (containerColor = Color.Blue, modifier = Modifier.background(gradientBrush)){
+    BottomAppBar (containerColor = Color.White, modifier = Modifier.background(gradientBrush)){
         NavigationBar(containerColor = Color.Transparent) {
             menu_items.forEach{item->
                 val selected = currentRoute(navController) == item.route

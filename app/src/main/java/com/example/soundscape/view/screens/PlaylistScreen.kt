@@ -88,13 +88,6 @@ fun listaPlaylist(){
         Image(painter = painterResource(id = R.drawable.portada_musica),
             contentDescription = "",
             modifier = Modifier.fillMaxWidth().height(220.dp))
-        Row {
-            Icon(imageVector = Icons.Outlined.Search,
-                contentDescription = "",
-                tint = Color.White,
-                modifier = Modifier.size(35.dp))
-            Text("Buscador va aqui", fontSize = 25.sp, color = Color.White)
-        }
         LazyColumn (verticalArrangement = Arrangement.spacedBy(10.dp)) {
             items (musicList) {music ->
                 Row (modifier = Modifier.fillMaxWidth()
